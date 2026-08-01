@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Availability{% endblock %}
+
+{% block extra_head %}
+<style>
+    .slot-cell {
+        cursor: pointer;
+        text-align: center;
+        user-select: none;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        min-width: 90px;
+    }
+
+    .slot-cell:hover {
+        background-color: #e2e6ea;
+    }
+
+    .slot-badge {
+        pointer-events: none;
+    }
+
+    .slot-na {
+        text-align: center;
+        background-color: #f1f1f1;
+        border: 1px solid #dee2e6;
+        min-width: 90px;
+        color: #adb5bd;
+    }
+
+    .day-label {
+        white-space: nowrap;
+    }
+
+    .availability-table {
+        table-layout: fixed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-3">Availability</h1>
+    <p>
+        We need to schedule the
+        {% for event in events %}{{ labels[event] }} ({{ durations[event] // 60 }}h){% if not loop.last %} and {% endif %}{% endfor %}.
+        Pick your name, then click the blocks you're free. Click "Save my availability" when you're done.
+    </p>
+
+    <div class="mb-4" style="max-width: 300px;">
+        <label for="name-select" class="form-label">Your name</label>
+        <select id="name-select" class="form-select">
+            <option value="">Choose your name...</option>
+            {% for member in team %}
+            <option value="{{ member.name }}">{{ member.name.title() }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="save-alert alert d-none" role="alert"></div>
+
+    <div class="table-responsive">
+        <table class="table availability-table">
+            <thead>
+                <tr>
+                    <th class="day-label">Date</th>
+                    <th class="text-center">Morning</th>
+                    <th class="text-center">Afternoon</th>
+                    <th class="text-center">Evening</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in days %}
+                <tr>
+                    <td class="day-label">{{ day.label }}</td>
+                    {% for block in day.blocks %}
+                        {% if block.applicable %}
+                        <td class="slot-cell selected" data-slot="{{ block.slot }}">
+                            <span class="badge bg-success slot-badge">Available</span>
+                        </td>
+                        {% else %}
+                        <td class="slot-na">
+                            <span class="badge bg-secondary">Not Applicable</span>
+                        </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="save-alert alert d-none mt-3" role="alert"></div>
+
+    <button id="save-btn" class="btn btn-success mt-2">Save my availability</button>
+    <a href="{{ url_for('availability_results') }}" class="btn btn-outline-secondary mt-2">See what everyone's said so far &rarr;</a>
+</div>
+
+<script src="{{ url_for('static', filename='js/availability.js') }}" defer></script>
+{% endblock %}

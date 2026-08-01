@@ -1,12 +1,26 @@
 from pathlib import Path
 from random import choice
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from yfpy.query import YahooFantasySportsQuery
 
 
 from configurations import CLIENT_ID, CLIENT_SECRET, PATH
-from declarations import Team, RAVINE_RUMBLE, GAME_CODE, GAME_ID
+from declarations import (
+    Team,
+    RAVINE_RUMBLE,
+    GAME_CODE,
+    GAME_ID,
+    Event,
+    EVENT_LABELS,
+    EVENT_DURATION_MINUTES,
+)
+from scheduling import (
+    candidate_days,
+    save_person_availability,
+    get_person_availability,
+    compute_results,
+)
 
 
 app = Flask(__name__)
@@ -54,3 +68,52 @@ def home():
 @app.route('/bracket')
 def bracket():
     return render_template('bracket.html')
+
+
+@app.route('/availability', methods=['GET'])
+def availability():
+    return render_template(
+        'availability.html',
+        team=Team,
+        events=Event,
+        labels=EVENT_LABELS,
+        durations=EVENT_DURATION_MINUTES,
+        days=candidate_days(),
+    )
+
+
+@app.route('/availability', methods=['POST'])
+def availability_submit():
+    payload = request.get_json(silent=True) or {}
+    name = payload.get('name', '').upper()
+    if name not in Team.__members__:
+        return jsonify(ok=False, error='Unknown name'), 400
+
+    slots = payload.get('slots', [])
+    if not isinstance(slots, list):
+        return jsonify(ok=False, error='Invalid slots'), 400
+
+    updated_at = save_person_availability(name, slots)
+    return jsonify(ok=True, updated_at=updated_at)
+
+
+@app.route('/availability/mine')
+def availability_mine():
+    name = request.args.get('name', '').upper()
+    if name not in Team.__members__:
+        return jsonify(error='Unknown name'), 400
+    slots = get_person_availability(name)
+    return jsonify(submitted=slots is not None, slots=slots or [])
+
+
+@app.route('/availability/results')
+def availability_results():
+    return render_template(
+        'availability_results.html',
+        events=Event,
+        labels=EVENT_LABELS,
+        durations=EVENT_DURATION_MINUTES,
+        days=candidate_days(),
+        results=compute_results(),
+        total_people=len(Team),
+    )

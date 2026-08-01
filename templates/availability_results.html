@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Availability Results{% endblock %}
+
+{% block extra_head %}
+<style>
+    .result-cell {
+        text-align: center;
+        border: 1px solid #dee2e6;
+        min-width: 90px;
+    }
+
+    .result-cell.best-window {
+        outline: 3px solid #198754;
+        outline-offset: -3px;
+        font-weight: bold;
+    }
+
+    .result-na {
+        text-align: center;
+        background-color: #f1f1f1;
+        border: 1px solid #dee2e6;
+        min-width: 90px;
+        color: #adb5bd;
+    }
+
+    .day-label {
+        white-space: nowrap;
+    }
+
+    .availability-table {
+        table-layout: fixed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-3">Availability Results</h1>
+    <p>
+        This same availability is used to pick a time for both the
+        {% for event in events %}{{ labels[event] }} ({{ durations[event] // 60 }}h){% if not loop.last %} and {% endif %}{% endfor %}.
+    </p>
+
+    {% if results.best_count > 0 %}
+    <p>
+        Best so far:
+        {% for day in days %}
+            {% for block in day.blocks %}
+                {% if block.slot in results.best %}
+                <strong>{{ day.label }}, {{ block.name }}</strong> ({{ results.best_count }}/{{ total_people }} available){% if not loop.last %}, {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </p>
+    {% else %}
+    <p class="text-muted">No one has submitted availability yet.</p>
+    {% endif %}
+
+    <p>Submitted: {{ results.submitted | length }}/{{ total_people }}
+        {% if results.missing %}&mdash; still waiting on: {{ results.missing | map('title') | join(', ') }}{% endif %}
+    </p>
+
+    <div class="table-responsive">
+        <table class="table availability-table">
+            <thead>
+                <tr>
+                    <th class="day-label">Date</th>
+                    <th class="text-center">Morning</th>
+                    <th class="text-center">Afternoon</th>
+                    <th class="text-center">Evening</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in days %}
+                <tr>
+                    <td class="day-label">{{ day.label }}</td>
+                    {% for block in day.blocks %}
+                        {% if block.applicable %}
+                            {% set cell = results.heatmap[block.slot] %}
+                            {% set ratio = (cell.count / total_people) if total_people else 0 %}
+                            <td class="result-cell {{ 'best-window' if block.slot in results.best else '' }}"
+                                style="background-color: rgba(25, 135, 84, {{ ratio }});"
+                                title="{{ cell.names | map('title') | join(', ') if cell.names else 'Nobody yet' }}">
+                                {{ cell.count }}
+                            </td>
+                        {% else %}
+                        <td class="result-na">N/A</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ url_for('availability') }}" class="btn btn-outline-secondary mt-2">Edit my availability</a>
+</div>
+{% endblock %}
