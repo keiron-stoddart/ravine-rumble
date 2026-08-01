@@ -24,22 +24,26 @@ GIFS = [
 @app.route('/')
 def home():
     # documentation: https://github.com/uberfastman/yfpy
-    query = YahooFantasySportsQuery(
-        league_id=RAVINE_RUMBLE,
-        game_code=GAME_CODE,
-        game_id=GAME_ID,
-        yahoo_consumer_key=CLIENT_ID,
-        yahoo_consumer_secret=CLIENT_SECRET,
-        env_file_location=Path(PATH)
-    )
+    try:
+        query = YahooFantasySportsQuery(
+            league_id=RAVINE_RUMBLE,
+            game_code=GAME_CODE,
+            game_id=GAME_ID,
+            yahoo_consumer_key=CLIENT_ID,
+            yahoo_consumer_secret=CLIENT_SECRET,
+            env_file_location=Path(PATH)
+        )
 
-    query.save_access_token_data_to_env_file(
-        env_file_location=Path(PATH),
-        save_json_to_var_only=True
-    )
+        query.save_access_token_data_to_env_file(
+            env_file_location=Path(PATH),
+            save_json_to_var_only=True
+        )
 
-    paul = query.get_team_stats_by_week(Team.PAUL.value, 15)
-    tim = query.get_team_stats_by_week(Team.TIM.value, 15)
+        paul = query.get_team_stats_by_week(Team.PAUL.value, 15)
+        tim = query.get_team_stats_by_week(Team.TIM.value, 15)
+    except Exception:
+        app.logger.exception('Failed to fetch scores from Yahoo')
+        return render_template('unavailable.html', gif=choice(GIFS))
 
     return render_template(
         'losers.html',

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-danger align-items-center pb-3">
+    <h1 class="text-bg-danger pt-3 text-center">Loser Tournament</h1>
+    <p style="text-align:center"><iframe src="{{ gif }}" width="240" height="240" allowFullScreen style="pointer-events: none;"></iframe></p>
+</div>
+
+<div class="container text-center mt-5 mb-4">
+    <h3>Scores are temporarily unavailable</h3>
+    <p>Yahoo isn't playing nice right now. Check back soon, or take a look at the <a href="{{ url_for('bracket') }}">bracket</a> in the meantime.</p>
+</div>
+
+<div class="container text-center mt-4 mb-4">
+    <h3>Congratulations to Brian Anderson</h3>
+    <p>for completing the 2025 Loser Challenge beer mile!</p>
+    <div class="d-flex justify-content-center">
+        <div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="18811799064" data-style="standard" data-from-embed="false" data-token="Z4WI779Nh4WWUIFCeeMFf_6B4oIJr2t7tql6hA5uYDs"></div>
+    </div>
+    <script src="https://strava-embeds.com/embed.js"></script>
+</div>
+{% endblock %}

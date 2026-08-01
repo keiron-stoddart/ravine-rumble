@@ -1,15 +1,10 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <title>Ravine Rumble Losers' Bracket</title>
-</head>
+{% block title %}Ravine Rumble Losers' Bracket{% endblock %}
 
-
+{% block content %}
 <div class="bg-danger align-items-center pb-3">
-    <h1 class="text-bg-danger pt-3 text-center"><a class="text-white" href="{{ url_for('bracket') }}">Loser Tournament</a></h1>
+    <h1 class="text-bg-danger pt-3 text-center">Loser Tournament</h1>
     <h3 class="text-bg-danger text-center">Round 1</h3>
     <p style="text-align:center"><iframe src="{{ gif }}" width="240" height="240" allowFullScreen style="pointer-events: none;"></iframe></p>
 </div>
@@ -45,6 +40,16 @@
     </div>
 </div>
 
-<div class="text-center text-bg-danger mt-2">
+<div class="text-center text-bg-danger mt-2 pb-2">
     Bigger losers waiting for next week: Bacon (9), Danzey (10), Keiron (11)
 </div>
+
+<div class="container text-center mt-4 mb-4">
+    <h3>Congratulations to Brian Anderson</h3>
+    <p>for completing the 2025 Loser Challenge beer mile!</p>
+    <div class="d-flex justify-content-center">
+        <div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="18811799064" data-style="standard" data-from-embed="false" data-token="Z4WI779Nh4WWUIFCeeMFf_6B4oIJr2t7tql6hA5uYDs"></div>
+    </div>
+    <script src="https://strava-embeds.com/embed.js"></script>
+</div>
+{% endblock %}
