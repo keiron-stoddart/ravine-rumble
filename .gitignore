@@ -5,3 +5,4 @@ configurations.py
 /token.json
 __pycache__
 /run.sh
+/.env
