@@ -26,10 +26,35 @@
 
     .day-label {
         white-space: nowrap;
+        position: sticky;
+        left: 0;
+        background-color: #fff;
+        z-index: 1;
     }
 
     .availability-table {
         table-layout: fixed;
+    }
+
+    @media (max-width: 575.98px) {
+        .availability-table {
+            font-size: 0.85rem;
+        }
+
+        .result-cell,
+        .result-na {
+            min-width: 56px;
+        }
+
+        .label-full {
+            display: none;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .label-short {
+            display: none;
+        }
     }
 </style>
 {% endblock %}
@@ -66,9 +91,15 @@
             <thead>
                 <tr>
                     <th class="day-label">Date</th>
-                    <th class="text-center">Morning</th>
-                    <th class="text-center">Afternoon</th>
-                    <th class="text-center">Evening</th>
+                    <th class="text-center">
+                        <span class="label-full">Morning</span><span class="label-short">Morn</span>
+                    </th>
+                    <th class="text-center">
+                        <span class="label-full">Afternoon</span><span class="label-short">Aft</span>
+                    </th>
+                    <th class="text-center">
+                        <span class="label-full">Evening</span><span class="label-short">Eve</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>

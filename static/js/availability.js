@@ -12,7 +12,10 @@
         cell.classList.toggle('selected', available);
         const badge = cell.querySelector('.slot-badge');
         if (badge) {
-            badge.textContent = available ? 'Available' : 'Unavailable';
+            const full = badge.querySelector('.label-full');
+            const short = badge.querySelector('.label-short');
+            if (full) full.textContent = available ? 'Available' : 'Unavailable';
+            if (short) short.textContent = available ? 'Free' : 'Busy';
             badge.classList.toggle('bg-success', available);
             badge.classList.toggle('bg-danger', !available);
         }

@@ -11,6 +11,7 @@
         background-color: #f8f9fa;
         border: 1px solid #dee2e6;
         min-width: 90px;
+        padding: 0.75rem 0.5rem;
     }
 
     .slot-cell:hover {
@@ -31,10 +32,37 @@
 
     .day-label {
         white-space: nowrap;
+        position: sticky;
+        left: 0;
+        background-color: #fff;
+        z-index: 1;
     }
 
     .availability-table {
         table-layout: fixed;
+    }
+
+    /* Shorter labels on phones so the grid fits without truncating text. */
+    @media (max-width: 575.98px) {
+        .availability-table {
+            font-size: 0.85rem;
+        }
+
+        .slot-cell,
+        .slot-na {
+            min-width: 64px;
+            padding: 0.6rem 0.25rem;
+        }
+
+        .label-full {
+            display: none;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .label-short {
+            display: none;
+        }
     }
 </style>
 {% endblock %}
@@ -65,9 +93,15 @@
             <thead>
                 <tr>
                     <th class="day-label">Date</th>
-                    <th class="text-center">Morning</th>
-                    <th class="text-center">Afternoon</th>
-                    <th class="text-center">Evening</th>
+                    <th class="text-center">
+                        <span class="label-full">Morning</span><span class="label-short">Morn</span>
+                    </th>
+                    <th class="text-center">
+                        <span class="label-full">Afternoon</span><span class="label-short">Aft</span>
+                    </th>
+                    <th class="text-center">
+                        <span class="label-full">Evening</span><span class="label-short">Eve</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -77,11 +111,15 @@
                     {% for block in day.blocks %}
                         {% if block.applicable %}
                         <td class="slot-cell selected" data-slot="{{ block.slot }}">
-                            <span class="badge bg-success slot-badge">Available</span>
+                            <span class="badge bg-success slot-badge">
+                                <span class="label-full">Available</span><span class="label-short">Free</span>
+                            </span>
                         </td>
                         {% else %}
                         <td class="slot-na">
-                            <span class="badge bg-secondary">Not Applicable</span>
+                            <span class="badge bg-secondary">
+                                <span class="label-full">Not Applicable</span><span class="label-short">N/A</span>
+                            </span>
                         </td>
                         {% endif %}
                     {% endfor %}
@@ -93,8 +131,10 @@
 
     <div class="save-alert alert d-none mt-3" role="alert"></div>
 
-    <button id="save-btn" class="btn btn-success mt-2">Save my availability</button>
-    <a href="{{ url_for('availability_results') }}" class="btn btn-outline-secondary mt-2">See what everyone's said so far &rarr;</a>
+    <div class="d-grid d-sm-flex gap-2 mt-2">
+        <button id="save-btn" class="btn btn-success">Save my availability</button>
+        <a href="{{ url_for('availability_results') }}" class="btn btn-outline-secondary">See what everyone's said so far &rarr;</a>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/availability.js') }}" defer></script>
