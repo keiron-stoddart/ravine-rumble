@@ -31,10 +31,48 @@
 
     .day-label {
         white-space: nowrap;
+        background-color: #fff;
+        position: sticky;
+        left: 0;
     }
 
     .availability-table {
         table-layout: fixed;
+    }
+
+    .availability-table .badge {
+        white-space: normal;
+    }
+
+    .header-abbr {
+        display: none;
+    }
+
+    @media (max-width: 576px) {
+        .availability-table th,
+        .availability-table td {
+            padding: 0.4rem 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .slot-cell,
+        .slot-na {
+            min-width: 72px;
+        }
+
+        .availability-table .badge {
+            font-size: 0.68rem;
+            padding: 0.35em 0.4em;
+            line-height: 1.15;
+        }
+
+        .header-full {
+            display: none;
+        }
+
+        .header-abbr {
+            display: inline;
+        }
     }
 </style>
 {% endblock %}
@@ -65,9 +103,9 @@
             <thead>
                 <tr>
                     <th class="day-label">Date</th>
-                    <th class="text-center">Morning</th>
-                    <th class="text-center">Afternoon</th>
-                    <th class="text-center">Evening</th>
+                    <th class="text-center"><span class="header-full">Morning</span><span class="header-abbr">AM</span></th>
+                    <th class="text-center"><span class="header-full">Afternoon</span><span class="header-abbr">PM</span></th>
+                    <th class="text-center"><span class="header-full">Evening</span><span class="header-abbr">Eve</span></th>
                 </tr>
             </thead>
             <tbody>
