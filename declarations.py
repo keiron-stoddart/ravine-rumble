@@ -52,13 +52,13 @@ SEASON_2026_EVENTS = [
     {
         "label": "Pre-Season Meeting",
         "date": "Thursday, August 27",
-        "time": "7:00 – 8:00pm",
+        "time": "7:00 – 8:00pm ET",
         "calendar_url": "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NWg0ZTQ2M3E0M2txcDVuaXQybmtyMm5rYm4ga2Vpcm9uLnN0b2RkYXJ0QG0&tmsrc=keiron.stoddart%40gmail.com",
     },
     {
         "label": "Draft",
         "date": "Thursday, September 3",
-        "time": "7:00 – 9:00pm",
+        "time": "7:00 – 9:00pm ET",
         "calendar_url": "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MTlyYXNsZTcwbmJtNmY0dWwwZDNtcjN0ZWMga2Vpcm9uLnN0b2RkYXJ0QG0&tmsrc=keiron.stoddart%40gmail.com",
     },
 ]
