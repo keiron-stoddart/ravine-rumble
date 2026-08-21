@@ -62,6 +62,11 @@
 {% block content %}
 <div class="container mt-4 mb-5">
     <h1 class="mb-3">Availability Results</h1>
+    {% if archived %}
+    <div class="alert alert-secondary">
+        This poll is closed &mdash; see the <a href="{{ url_for('season_2026') }}">confirmed 2026 schedule</a>. Archived below for reference.
+    </div>
+    {% endif %}
     <p>
         This same availability is used to pick a time for both the
         {% for event in events %}{{ labels[event] }} ({{ durations[event] // 60 }}h){% if not loop.last %} and {% endif %}{% endfor %}.
@@ -125,6 +130,8 @@
         </table>
     </div>
 
+    {% if not archived %}
     <a href="{{ url_for('availability') }}" class="btn btn-outline-secondary mt-2">Edit my availability</a>
+    {% endif %}
 </div>
 {% endblock %}

@@ -23,7 +23,7 @@
                     <a class="nav-link {{ 'active' if request.endpoint == 'bracket' else '' }}" href="{{ url_for('bracket') }}">Bracket</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.endpoint in ('availability', 'availability_submit', 'availability_results') else '' }}" href="{{ url_for('availability') }}">Availability</a>
+                    <a class="nav-link {{ 'active' if request.endpoint == 'season_2026' else '' }}" href="{{ url_for('season_2026') }}">2026 Season</a>
                 </li>
             </ul>
         </div>

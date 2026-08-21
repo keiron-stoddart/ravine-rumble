@@ -14,6 +14,8 @@ from declarations import (
     Event,
     EVENT_LABELS,
     EVENT_DURATION_MINUTES,
+    AVAILABILITY_ARCHIVED,
+    SEASON_2026_EVENTS,
 )
 from scheduling import (
     candidate_days,
@@ -70,6 +72,11 @@ def bracket():
     return render_template('bracket.html')
 
 
+@app.route('/2026')
+def season_2026():
+    return render_template('season_2026.html', events=SEASON_2026_EVENTS)
+
+
 @app.route('/availability', methods=['GET'])
 def availability():
     return render_template(
@@ -79,11 +86,15 @@ def availability():
         labels=EVENT_LABELS,
         durations=EVENT_DURATION_MINUTES,
         days=candidate_days(),
+        archived=AVAILABILITY_ARCHIVED,
     )
 
 
 @app.route('/availability', methods=['POST'])
 def availability_submit():
+    if AVAILABILITY_ARCHIVED:
+        return jsonify(ok=False, error='This poll is closed.'), 403
+
     payload = request.get_json(silent=True) or {}
     name = payload.get('name', '').upper()
     if name not in Team.__members__:
@@ -116,4 +127,5 @@ def availability_results():
         days=candidate_days(),
         results=compute_results(),
         total_people=len(Team),
+        archived=AVAILABILITY_ARCHIVED,
     )

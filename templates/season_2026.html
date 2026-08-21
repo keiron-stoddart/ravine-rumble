@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}2026 Season{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-3">2026 Season</h1>
+    <p>Times are locked in based on everyone's availability. Add them to your calendar below.</p>
+
+    <div class="row g-4">
+        {% for event in events %}
+        <div class="col-12 col-sm-6">
+            <div class="card h-100 text-center">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                    <h3 class="card-title mb-3">{{ event.label }}</h3>
+                    <a target="_blank" href="{{ event.calendar_url }}">
+                        <img border="0" src="https://calendar.google.com/calendar/images/ext/gc_button1_en.gif" alt="Add {{ event.label }} to Google Calendar">
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="text-muted mt-4">
+        These dates came out of the pre-season availability poll &mdash;
+        <a href="{{ url_for('availability_results') }}">see the archived results</a>.
+    </p>
+</div>
+{% endblock %}

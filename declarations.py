@@ -44,6 +44,21 @@ EVENT_DURATION_MINUTES = {
 POLL_START_DATE = date(2026, 8, 5)
 POLL_END_DATE = date(2026, 9, 8)
 
+# The 2026 poll is closed — times are locked in and posted on the /2026 page.
+# Flip back to False if a future season needs the poll open again.
+AVAILABILITY_ARCHIVED = True
+
+SEASON_2026_EVENTS = [
+    {
+        "label": "Pre-Season Meeting",
+        "calendar_url": "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NWg0ZTQ2M3E0M2txcDVuaXQybmtyMm5rYm4ga2Vpcm9uLnN0b2RkYXJ0QG0&tmsrc=keiron.stoddart%40gmail.com",
+    },
+    {
+        "label": "Draft",
+        "calendar_url": "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MTlyYXNsZTcwbmJtNmY0dWwwZDNtcjN0ZWMga2Vpcm9uLnN0b2RkYXJ0QG0&tmsrc=keiron.stoddart%40gmail.com",
+    },
+]
+
 DAY_BLOCKS = ["Morning", "Afternoon", "Evening"]
 
 # On weekdays only Evening is offered; Morning/Afternoon show as "Not Applicable".

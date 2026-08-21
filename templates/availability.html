@@ -70,6 +70,12 @@
 {% block content %}
 <div class="container mt-4 mb-5">
     <h1 class="mb-3">Availability</h1>
+    {% if archived %}
+    <div class="alert alert-secondary">
+        This poll is closed &mdash; see the <a href="{{ url_for('season_2026') }}">confirmed 2026 schedule</a>
+        or the <a href="{{ url_for('availability_results') }}">archived results</a>.
+    </div>
+    {% else %}
     <p>
         We need to schedule the
         {% for event in events %}{{ labels[event] }} ({{ durations[event] // 60 }}h){% if not loop.last %} and {% endif %}{% endfor %}.
@@ -87,7 +93,9 @@
     </div>
 
     <div class="save-alert alert d-none" role="alert"></div>
+    {% endif %}
 
+    {% if not archived %}
     <div class="table-responsive">
         <table class="table availability-table">
             <thead>
@@ -122,14 +130,19 @@
             </tbody>
         </table>
     </div>
+    {% endif %}
 
+    {% if not archived %}
     <div class="save-alert alert d-none mt-3" role="alert"></div>
 
     <div class="d-grid d-sm-flex gap-2 mt-2">
         <button id="save-btn" class="btn btn-success">Save my availability</button>
         <a href="{{ url_for('availability_results') }}" class="btn btn-outline-secondary">See what everyone's said so far &rarr;</a>
     </div>
+    {% endif %}
 </div>
 
+{% if not archived %}
 <script src="{{ url_for('static', filename='js/availability.js') }}" defer></script>
+{% endif %}
 {% endblock %}
