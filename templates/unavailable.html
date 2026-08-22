@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if trivia_live %}
+<div class="alert alert-warning text-center rounded-0 mb-0" role="alert">
+    🎉 Live trivia is running — <a href="{{ url_for('trivia_play') }}" class="alert-link">join at /trivia</a>
+</div>
+{% endif %}
 <div class="bg-danger align-items-center pb-3">
     <h1 class="text-bg-danger pt-3 text-center">Loser Tournament</h1>
     <p style="text-align:center"><iframe src="{{ gif }}" width="240" height="240" allowFullScreen style="pointer-events: none;"></iframe></p>

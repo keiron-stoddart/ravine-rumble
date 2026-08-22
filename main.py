@@ -29,6 +29,7 @@ from scheduling import (
     get_person_availability,
     compute_results,
 )
+from prediction import predict_winner
 import trivia
 
 
@@ -47,7 +48,37 @@ GIFS = [
 @app.context_processor
 def nav_flags():
     """base.html is extended everywhere, so the nav's flags live here."""
-    return {'stats_hidden': STATS_HIDDEN}
+    return {
+        'stats_hidden': STATS_HIDDEN,
+        'availability_archived': AVAILABILITY_ARCHIVED,
+    }
+
+
+def _win_probabilities(team_a, team_b):
+    """Monte-Carlo win chance (whole %) for a live matchup, or (None, None).
+
+    Returns None rather than a number whenever we can't compute a meaningful
+    probability — the dev Yahoo token can be stale (scores fall back to
+    unavailable.html) and projections are missing/zero before kickoff. In those
+    cases the page renders without the probability instead of a bogus figure.
+    """
+    try:
+        if not (team_a['team_projected_points'].total and team_b['team_projected_points'].total):
+            return None, None
+        a_prob, b_prob = predict_winner(team_a, team_b)
+        return round(a_prob * 100), round(b_prob * 100)
+    except Exception:
+        app.logger.exception('Failed to compute win probability')
+        return None, None
+
+
+def _trivia_is_live():
+    """Read-only peek so landing pages can nudge people toward a running game."""
+    try:
+        return trivia.load_state()['phase'] != trivia.LOBBY
+    except Exception:
+        app.logger.exception('Failed to read trivia state')
+        return False
 
 
 @app.route('/')
@@ -72,11 +103,16 @@ def home():
         tim = query.get_team_stats_by_week(Team.TIM.value, 15)
     except Exception:
         app.logger.exception('Failed to fetch scores from Yahoo')
-        return render_template('unavailable.html', gif=choice(GIFS))
+        return render_template(
+            'unavailable.html', gif=choice(GIFS), trivia_live=_trivia_is_live()
+        )
 
+    tim_win, paul_win = _win_probabilities(tim, paul)
     return render_template(
         'losers.html',
-        paul=paul, tim=tim, gif=choice(GIFS)
+        paul=paul, tim=tim, gif=choice(GIFS),
+        tim_win=tim_win, paul_win=paul_win,
+        trivia_live=_trivia_is_live(),
     )
 
 

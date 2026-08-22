@@ -3,6 +3,11 @@
 {% block title %}Ravine Rumble Losers' Bracket{% endblock %}
 
 {% block content %}
+{% if trivia_live %}
+<div class="alert alert-warning text-center rounded-0 mb-0" role="alert">
+    🎉 Live trivia is running — <a href="{{ url_for('trivia_play') }}" class="alert-link">join at /trivia</a>
+</div>
+{% endif %}
 <div class="bg-danger align-items-center pb-3">
     <h1 class="text-bg-danger pt-3 text-center">Loser Tournament</h1>
     <h3 class="text-bg-danger text-center">Round 1</h3>
@@ -17,6 +22,7 @@
                 <h2>(7) Tim</h2>
                 <h3><a href="https://football.fantasysports.yahoo.com/f1/546047/3" target="_blank">{{ tim['team_points'].total }}</a></h3>
                 Projection: {{ tim['team_projected_points'].total }}<br>
+                {% if tim_win is not none %}<div class="fw-bold mt-1">{{ tim_win }}% to win</div>{% endif %}
                 <img
                         src="{{ url_for('static', filename='tim.jpg') }}"
                         alt="nan"
@@ -30,6 +36,7 @@
                 <h2>Paul (8)</h2>
                 <h3><a href="https://football.fantasysports.yahoo.com/f1/546047/4" target="_blank">{{ paul['team_points'].total }}</a></h3>
                 Projection: {{ paul['team_projected_points'].total }}<br>
+                {% if paul_win is not none %}<div class="fw-bold mt-1">{{ paul_win }}% to win</div>{% endif %}
                 <img
                         src="{{ url_for('static', filename='paul.jpg') }}"
                         alt="paul"

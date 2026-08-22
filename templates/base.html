@@ -59,6 +59,11 @@
                     <a class="nav-link {{ 'active' if request.endpoint == 'stats' else '' }}" href="{{ url_for('stats') }}">Stats</a>
                 </li>
                 {% endif %}
+                {% if not availability_archived %}
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ('availability', 'availability_results') else '' }}" href="{{ url_for('availability') }}">Availability</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link {{ 'active' if request.endpoint == 'trivia_play' else '' }}" href="{{ url_for('trivia_play') }}">Trivia</a>
                 </li>
