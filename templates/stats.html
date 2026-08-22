@@ -2,6 +2,35 @@
 
 {% block title %}Stats{% endblock %}
 
+{% block extra_head %}
+<style>
+    .sortable-table th.sortable {
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        padding-right: 1.25rem;
+    }
+
+    .sortable-table th.sortable::after {
+        content: "⇅";
+        position: absolute;
+        right: 0.5rem;
+        opacity: 0.35;
+        font-size: 0.85em;
+    }
+
+    .sortable-table th.sortable.sorted-asc::after {
+        content: "↑";
+        opacity: 1;
+    }
+
+    .sortable-table th.sortable.sorted-desc::after {
+        content: "↓";
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4 mb-5">
     <h1 class="mb-1">Ravine Rumble</h1>
@@ -90,41 +119,41 @@
         <select id="year-filter" class="form-select">
             <option value="all">All years</option>
             {% for year in season_years %}
-            <option value="{{ year }}">{{ year }}</option>
+            <option value="{{ year }}" {{ 'selected' if loop.first }}>{{ year }}</option>
             {% endfor %}
         </select>
     </div>
     <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="season-results-table">
+        <table class="table table-striped table-bordered sortable-table" id="season-results-table">
             <thead>
                 <tr>
-                    <th>Year</th>
-                    <th>Manager</th>
-                    <th>Team</th>
-                    <th class="text-center">Finish</th>
-                    <th class="text-center">Record</th>
-                    <th class="text-center">Points For</th>
-                    <th class="text-center">Points Against</th>
-                    <th class="text-center">Point Diff</th>
-                    <th class="text-center">Streak</th>
-                    <th class="text-center">Waiver Budget Left</th>
-                    <th class="text-center">Moves</th>
+                    <th class="sortable">Year</th>
+                    <th class="sortable">Manager</th>
+                    <th class="sortable">Team</th>
+                    <th class="text-center sortable">Finish</th>
+                    <th class="text-center sortable">Record</th>
+                    <th class="text-center sortable">Points For</th>
+                    <th class="text-center sortable">Points Against</th>
+                    <th class="text-center sortable">Point Diff</th>
+                    <th class="text-center sortable">Streak</th>
+                    <th class="text-center sortable">Waiver Budget Left</th>
+                    <th class="text-center sortable">Moves</th>
                 </tr>
             </thead>
             <tbody>
                 {% for row in season_results %}
                 <tr data-year="{{ row.year }}">
-                    <td>{{ row.year }}</td>
-                    <td>{{ row.manager }}</td>
-                    <td>{{ row.team }}</td>
-                    <td class="text-center">{{ row.finish }}</td>
-                    <td class="text-center">{{ row.wins }}-{{ row.losses }}</td>
-                    <td class="text-center">{{ row.points_for }}</td>
-                    <td class="text-center">{{ row.points_against }}</td>
-                    <td class="text-center">{{ row.point_diff }}</td>
-                    <td class="text-center">{{ row.streak }}</td>
-                    <td class="text-center">{{ row.waiver_budget if row.waiver_budget is not none else '—' }}</td>
-                    <td class="text-center">{{ row.moves }}</td>
+                    <td data-sort="{{ row.year }}">{{ row.year }}</td>
+                    <td data-sort="{{ row.manager }}">{{ row.manager }}</td>
+                    <td data-sort="{{ row.team }}">{{ row.team }}</td>
+                    <td class="text-center" data-sort="{{ row.finish }}">{{ row.finish }}</td>
+                    <td class="text-center" data-sort="{{ row.wins }}">{{ row.wins }}-{{ row.losses }}</td>
+                    <td class="text-center" data-sort="{{ row.points_for }}">{{ row.points_for }}</td>
+                    <td class="text-center" data-sort="{{ row.points_against }}">{{ row.points_against }}</td>
+                    <td class="text-center" data-sort="{{ row.point_diff }}">{{ row.point_diff }}</td>
+                    <td class="text-center" data-sort="{{ row.streak }}">{{ row.streak }}</td>
+                    <td class="text-center" data-sort="{{ row.waiver_budget if row.waiver_budget is not none else -1 }}">{{ row.waiver_budget if row.waiver_budget is not none else '—' }}</td>
+                    <td class="text-center" data-sort="{{ row.moves }}">{{ row.moves }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
