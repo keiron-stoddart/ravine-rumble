@@ -51,9 +51,18 @@
         </select>
     </div>
 
-    <div id="needs-name" class="alert alert-secondary">
+    <div id="needs-name" class="alert alert-secondary d-none">
         Pick your name above to join. The host controls when each question opens.
     </div>
+    <script>
+        // Synchronous, before-paint check: avoids flashing this alert for
+        // returning users while trivia.js's poll() round-trip is in flight.
+        if (localStorage.getItem('ravine-rumble-name')) {
+            document.getElementById('needs-name').classList.add('d-none');
+        } else {
+            document.getElementById('needs-name').classList.remove('d-none');
+        }
+    </script>
 
     <div id="stage" class="d-none">
         <div class="d-flex justify-content-between align-items-baseline mb-2">
