@@ -7,12 +7,12 @@
     <h1 class="mb-3">2025 Archive</h1>
     <p>Pick up where the 2025 season left off.</p>
 
-    <ul class="nav nav-pills gap-2">
+    <ul class="nav nav-pills flex-column gap-2">
         <li class="nav-item">
-            <a class="nav-link {{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Loser Tournament</a>
+            <a class="nav-link ps-0 {{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Loser Tournament</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ 'active' if request.endpoint == 'bracket' else '' }}" href="{{ url_for('bracket') }}">Bracket</a>
+            <a class="nav-link ps-0 {{ 'active' if request.endpoint == 'bracket' else '' }}" href="{{ url_for('bracket') }}">Bracket</a>
         </li>
     </ul>
 </div>
