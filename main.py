@@ -31,6 +31,7 @@ from scheduling import (
 )
 from prediction import predict_winner
 import trivia
+import pickem
 
 
 app = Flask(__name__)
@@ -79,6 +80,86 @@ def _trivia_is_live():
     except Exception:
         app.logger.exception('Failed to read trivia state')
         return False
+
+
+def _yahoo_query():
+    """Build the yfpy query exactly as home() does (same env-file token dance)."""
+    query = YahooFantasySportsQuery(
+        league_id=RAVINE_RUMBLE,
+        game_code=GAME_CODE,
+        game_id=GAME_ID,
+        yahoo_consumer_key=CLIENT_ID,
+        yahoo_consumer_secret=CLIENT_SECRET,
+        env_file_location=Path(PATH)
+    )
+    query.save_access_token_data_to_env_file(
+        env_file_location=Path(PATH),
+        save_json_to_var_only=True
+    )
+    return query
+
+
+def _pickem_open_matchups(week):
+    """Snapshot week `week`'s six matchups from Yahoo with probabilities frozen
+    at open. Raises on any Yahoo failure — the host route turns that into a 502.
+
+    yfpy is kept entirely out of pickem.py: this returns the plain dict list
+    that pickem.advance('open', ...) stores verbatim.
+    """
+    query = _yahoo_query()
+    raw = query.get_league_matchups_by_week(week)
+    id_to_name = {m.value: m.name for m in Team}
+    matchups = []
+    for i, mu in enumerate(raw, start=1):
+        home_t, away_t = mu.teams[0], mu.teams[1]
+        home_dict = {
+            'team_points': home_t.team_points,
+            'team_projected_points': home_t.team_projected_points,
+        }
+        away_dict = {
+            'team_points': away_t.team_points,
+            'team_projected_points': away_t.team_projected_points,
+        }
+        home_prob, away_prob = predict_winner(home_dict, away_dict)
+        matchups.append({
+            'id': f'{week}-{i}',
+            'home': id_to_name.get(home_t.team_id),
+            'away': id_to_name.get(away_t.team_id),
+            'home_proj': round(home_t.team_projected_points.total, 1),
+            'away_proj': round(away_t.team_projected_points.total, 1),
+            'home_prob': round(home_prob, 2),
+            'away_prob': round(away_prob, 2),
+            'winner': None,
+        })
+    return matchups
+
+
+def _pickem_score_winners(week, stored_matchups):
+    """Re-fetch week `week` from Yahoo and resolve each stored matchup's winner
+    (a Team name or "TIE"). Matched by team-name pair, not Yahoo ordering, so a
+    reordered response can't misattribute a result. Raises on Yahoo failure.
+    """
+    query = _yahoo_query()
+    raw = query.get_league_matchups_by_week(week)
+    id_to_name = {m.value: m.name for m in Team}
+    by_pair = {}
+    for mu in raw:
+        home_t, away_t = mu.teams[0], mu.teams[1]
+        home_name = id_to_name.get(home_t.team_id)
+        away_name = id_to_name.get(away_t.team_id)
+        hp = home_t.team_points.total
+        ap = away_t.team_points.total
+        if getattr(mu, 'is_tied', 0) or hp == ap:
+            winner = 'TIE'
+        else:
+            winner = home_name if hp > ap else away_name
+        by_pair[frozenset((home_name, away_name))] = winner
+    winners = {}
+    for m in stored_matchups:
+        winner = by_pair.get(frozenset((m['home'], m['away'])))
+        if winner is not None:
+            winners[m['id']] = winner
+    return winners
 
 
 @app.route('/')
@@ -207,6 +288,95 @@ def trivia_host_action():
     if action not in ('start', 'reveal', 'next', 'reset'):
         return jsonify(ok=False, error='Unknown action'), 400
     trivia.advance(action)
+    return jsonify(ok=True)
+
+
+@app.route('/pickem')
+def pickem_play():
+    return render_template('pickem.html', team=Team)
+
+
+@app.route('/pickem/state')
+def pickem_state():
+    name = request.args.get('name', '').upper()
+    name = name if name in Team.__members__ else None
+    return jsonify(pickem.public_state(pickem.load_state(), name))
+
+
+@app.route('/pickem/pick', methods=['POST'])
+def pickem_pick():
+    payload = request.get_json(silent=True) or {}
+    name = payload.get('name', '').upper()
+    if name not in Team.__members__:
+        return jsonify(ok=False, error='Unknown name'), 400
+
+    week = payload.get('week')
+    if week is None:
+        return jsonify(ok=False, error='Missing week'), 400
+
+    # Accept either a single {matchup_id, pick} tap or a whole {picks: {...}} card.
+    if 'picks' in payload and isinstance(payload['picks'], dict):
+        ok, error = pickem.record_picks(name, week, payload['picks'])
+    else:
+        matchup_id = payload.get('matchup_id')
+        pick = (payload.get('pick') or '').upper()
+        if not matchup_id or pick not in Team.__members__:
+            return jsonify(ok=False, error='Invalid pick'), 400
+        ok, error = pickem.record_pick(name, week, matchup_id, pick)
+
+    return jsonify(ok=True) if ok else (jsonify(ok=False, error=error), 409)
+
+
+@app.route('/pickem/host')
+def pickem_host():
+    return render_template('pickem_host.html')
+
+
+@app.route('/pickem/host/state')
+def pickem_host_state():
+    """Like /pickem/state but includes winners before the reveal (host-only)."""
+    state = pickem.load_state()
+    payload = pickem.public_state(state, None)
+    week = state['current_week']
+    wk = state['weeks'].get(str(week)) if week is not None else None
+    if wk:
+        payload['stored_status'] = wk.get('status')
+        payload['matchups'] = [dict(m) for m in wk['matchups']]  # winners visible to host
+        payload['pickers'] = sorted(state['picks'].get(str(week), {}).keys())
+    return jsonify(payload)
+
+
+@app.route('/pickem/host/action', methods=['POST'])
+def pickem_host_action():
+    payload = request.get_json(silent=True) or {}
+    action = payload.get('action')
+    if action not in ('open', 'lock', 'score', 'reset'):
+        return jsonify(ok=False, error='Unknown action'), 400
+
+    try:
+        week = int(payload.get('week'))
+    except (TypeError, ValueError):
+        return jsonify(ok=False, error='Invalid week'), 400
+
+    if action == 'open':
+        try:
+            matchups = _pickem_open_matchups(week)
+        except Exception:
+            app.logger.exception('Failed to fetch matchups from Yahoo')
+            return jsonify(ok=False, error='Could not reach Yahoo'), 502
+        locks_at = (payload.get('locks_at') or '').strip() or None
+        pickem.advance('open', week, matchups=matchups, locks_at=locks_at)
+    elif action == 'score':
+        stored = pickem.load_state()['weeks'].get(str(week), {}).get('matchups', [])
+        try:
+            winners = _pickem_score_winners(week, stored)
+        except Exception:
+            app.logger.exception('Failed to fetch final scores from Yahoo')
+            return jsonify(ok=False, error='Could not reach Yahoo'), 502
+        pickem.advance('score', week, winners=winners)
+    else:
+        pickem.advance(action, week)
+
     return jsonify(ok=True)
 
 

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Pick 'Em Host{% endblock %}
+
+{% block extra_head %}
+<style>
+    .host-matchup {
+        border: 2px solid var(--bs-border-color, #dee2e6);
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .host-matchup .team-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .host-matchup .team-row.is-winner {
+        font-weight: 700;
+        color: var(--bs-success, #198754);
+    }
+
+    .host-matchup .prob {
+        opacity: 0.6;
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 class="h4 mb-0">Pick 'Em &mdash; Host</h1>
+        <span class="badge bg-secondary" id="status-badge">&nbsp;</span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row g-2 align-items-end mb-3">
+                        <div class="col-auto">
+                            <label for="week-input" class="form-label small mb-1">Week</label>
+                            <input type="number" id="week-input" class="form-control" min="1" max="18" value="1" style="width: 6rem;">
+                        </div>
+                        <div class="col-auto">
+                            <label for="locks-input" class="form-label small mb-1">Locks at (optional)</label>
+                            <input type="datetime-local" id="locks-input" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-success" data-action="open">Open week</button>
+                        <button class="btn btn-warning" data-action="lock">Lock</button>
+                        <button class="btn btn-primary" data-action="score">Score week</button>
+                        <button class="btn btn-outline-danger ms-auto" data-action="reset">Reset week</button>
+                    </div>
+                    <div id="host-error" class="alert alert-danger d-none mt-3 mb-0"></div>
+                    <p class="text-muted small mt-2 mb-0">
+                        Opening/scoring pulls live matchups from Yahoo. Players join at
+                        <code id="join-url">/pickem</code>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <p class="text-muted mb-2" id="host-week-label">No week open.</p>
+                    <div id="host-matchups"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="h6 text-muted text-uppercase mb-2">Pickers</h2>
+                    <p class="display-6 mb-1" id="picker-fraction">&mdash;</p>
+                    <p class="small text-muted mb-0" id="picker-names"></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h6 text-muted text-uppercase mb-2">Season leaderboard</h2>
+                    <ol class="list-group list-group-numbered list-group-flush" id="host-leaderboard">
+                        <li class="list-group-item text-muted border-0 px-0">No scored weeks yet.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/pickem_host.js') }}" defer></script>
+{% endblock %}

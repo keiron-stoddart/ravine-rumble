@@ -67,6 +67,9 @@
                 <li class="nav-item">
                     <a class="nav-link {{ 'active' if request.endpoint == 'trivia_play' else '' }}" href="{{ url_for('trivia_play') }}">Trivia</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'pickem_play' else '' }}" href="{{ url_for('pickem_play') }}">Pick 'Em</a>
+                </li>
             </ul>
         </div>
     </div>
