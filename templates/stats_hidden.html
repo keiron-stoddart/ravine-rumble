@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Stats{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5 mb-5">
+    <h1 class="h3 mb-3">Stats are under wraps</h1>
+    <p class="text-muted">
+        The all-time stats give away every trivia answer, so they're locked until
+        after the pre-season trivia. Check back right after.
+    </p>
+    <a href="{{ url_for('trivia_play') }}" class="btn btn-outline-secondary mt-2">Go to Trivia &rarr;</a>
+</div>
+{% endblock %}

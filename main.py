@@ -21,6 +21,7 @@ from declarations import (
     SEASON_RESULTS,
     SEASON_RESULTS_YEARS,
     TRIVIA_QUESTIONS,
+    STATS_HIDDEN,
 )
 from scheduling import (
     candidate_days,
@@ -41,6 +42,12 @@ GIFS = [
     'https://giphy.com/embed/0Q2Idjtt38WLwrLGnO',
     'https://giphy.com/embed/jO1ZyDgmy9IBqFzPPm',
 ]
+
+
+@app.context_processor
+def nav_flags():
+    """base.html is extended everywhere, so the nav's flags live here."""
+    return {'stats_hidden': STATS_HIDDEN}
 
 
 @app.route('/')
@@ -90,6 +97,11 @@ def archive_2025():
 
 @app.route('/stats')
 def stats():
+    # Hiding the nav link alone wouldn't do much — the page answers every
+    # trivia question, and the URL is already known.
+    if STATS_HIDDEN:
+        return render_template('stats_hidden.html'), 404
+
     return render_template(
         'stats.html',
         finishes=LEAGUE_FINISHES,
