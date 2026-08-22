@@ -1,43 +1,31 @@
 (function () {
     const yearFilter = document.getElementById('year-filter');
-    const table = document.getElementById('season-results-table');
-    if (!yearFilter || !table) return;
+    const tableEl = document.getElementById('season-results-table');
+    if (!yearFilter || !tableEl || !window.simpleDatatables) return;
 
-    const rows = table.querySelectorAll('tbody tr');
+    const dataTable = new simpleDatatables.DataTable(tableEl, {
+        perPage: 25,
+        perPageSelect: [10, 25, 50, ["All", 0]],
+        columns: [
+            { select: 0, type: 'number' },
+            { select: 1, type: 'string' },
+            { select: 2, type: 'string' },
+            { select: 3, type: 'number' },
+            { select: 4, type: 'string' },
+            { select: 5, type: 'number' },
+            { select: 6, type: 'number' },
+            { select: 7, type: 'number' },
+            { select: 8, type: 'string' },
+            { select: 9, type: 'string' },
+            { select: 10, type: 'number' },
+        ],
+    });
 
-    function applyFilter() {
+    function applyYearFilter() {
         const year = yearFilter.value;
-        rows.forEach((row) => {
-            row.classList.toggle('d-none', year !== 'all' && row.dataset.year !== year);
-        });
+        dataTable.search(year === 'all' ? '' : year, [0]);
     }
 
-    yearFilter.addEventListener('change', applyFilter);
-    applyFilter();
-
-    const headers = table.querySelectorAll('th.sortable');
-    let currentSort = { index: null, dir: 1 };
-
-    headers.forEach((th, index) => {
-        th.addEventListener('click', () => {
-            const dir = currentSort.index === index ? -currentSort.dir : 1;
-            currentSort = { index, dir };
-
-            headers.forEach((h) => h.classList.remove('sorted-asc', 'sorted-desc'));
-            th.classList.add(dir === 1 ? 'sorted-asc' : 'sorted-desc');
-
-            const tbody = table.querySelector('tbody');
-            const sortedRows = Array.from(tbody.querySelectorAll('tr')).sort((a, b) => {
-                const aVal = a.children[index].dataset.sort;
-                const bVal = b.children[index].dataset.sort;
-                const aNum = parseFloat(aVal);
-                const bNum = parseFloat(bVal);
-                const bothNumeric = !isNaN(aNum) && !isNaN(bNum);
-                const cmp = bothNumeric ? aNum - bNum : aVal.localeCompare(bVal);
-                return cmp * dir;
-            });
-
-            sortedRows.forEach((row) => tbody.appendChild(row));
-        });
-    });
+    yearFilter.addEventListener('change', applyYearFilter);
+    applyYearFilter();
 })();
