@@ -77,6 +77,11 @@ def season_2026():
     return render_template('season_2026.html', events=SEASON_2026_EVENTS)
 
 
+@app.route('/archives/2025')
+def archive_2025():
+    return render_template('archive_2025.html')
+
+
 @app.route('/availability', methods=['GET'])
 def availability():
     return render_template(

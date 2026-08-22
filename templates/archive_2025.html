@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}2025 Archive{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-3">2025 Archive</h1>
+    <p>Pick up where the 2025 season left off.</p>
+
+    <ul class="nav nav-pills gap-2">
+        <li class="nav-item">
+            <a class="nav-link {{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Loser Tournament</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ 'active' if request.endpoint == 'bracket' else '' }}" href="{{ url_for('bracket') }}">Bracket</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

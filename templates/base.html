@@ -16,11 +16,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Loser Tournament</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.endpoint == 'bracket' else '' }}" href="{{ url_for('bracket') }}">Bracket</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ 'active' if request.endpoint in ('archive_2025', 'bracket') else '' }}" href="#" id="archivesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Archives
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="archivesDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('archive_2025') }}">2025</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ 'active' if request.endpoint == 'season_2026' else '' }}" href="{{ url_for('season_2026') }}">2026 Season</a>
