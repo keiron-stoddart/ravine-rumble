@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>{% block title %}Ravine Rumble{% endblock %}</title>
+    <style>
+        .navbar .dropdown-menu {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .navbar .dropdown-item {
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .navbar .dropdown-item:hover,
+        .navbar .dropdown-item:focus,
+        .navbar .dropdown-item.active {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .navbar .dropdown-toggle::after {
+            vertical-align: 0.15em;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -16,16 +42,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'season_2026' else '' }}" href="{{ url_for('season_2026') }}">2026</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ 'active' if request.endpoint in ('archive_2025', 'bracket') else '' }}" href="#" id="archivesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Archives
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="archivesDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('archive_2025') }}">2025</a></li>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="archivesDropdown">
+                        <li><a class="dropdown-item {{ 'active' if request.endpoint in ('archive_2025', 'bracket') else '' }}" href="{{ url_for('archive_2025') }}">2025</a></li>
                     </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.endpoint == 'season_2026' else '' }}" href="{{ url_for('season_2026') }}">2026 Season</a>
                 </li>
             </ul>
         </div>
