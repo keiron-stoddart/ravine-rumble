@@ -6,18 +6,12 @@
     const dataTable = new simpleDatatables.DataTable(tableEl, {
         perPage: 25,
         perPageSelect: [10, 25, 50, ["All", 0]],
+        // Only the plain numeric columns need a type. Text columns are left
+        // as the default 'html' so cell markup (the truncating span on Team)
+        // survives rendering, and columns 3, 4, 7 and 9 carry a data-order
+        // attribute that overrides type-based sorting anyway.
         columns: [
-            { select: 0, type: 'number' },
-            { select: 1, type: 'string' },
-            { select: 2, type: 'string' },
-            { select: 3, type: 'number' },
-            { select: 4, type: 'string' },
-            { select: 5, type: 'number' },
-            { select: 6, type: 'number' },
-            { select: 7, type: 'number' },
-            { select: 8, type: 'string' },
-            { select: 9, type: 'string' },
-            { select: 10, type: 'number' },
+            { select: [0, 5, 6, 10], type: 'number' },
         ],
     });
 

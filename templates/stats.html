@@ -5,12 +5,99 @@
 {% block extra_head %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@10.3.0/dist/style.css">
 <style>
-    #season-results-table td, #season-results-table th {
+    #season-results-table th,
+    #season-results-table td {
         white-space: nowrap;
+        vertical-align: middle;
     }
 
+    /* Headers, not data, were driving the table width — leave room for the
+       sort icon but keep the label itself compact. */
     #season-results-table .datatable-sorter {
-        padding-right: 1.25rem;
+        padding-right: 1.1rem;
+    }
+
+    #season-results-table th,
+    #season-results-table td {
+        padding: 0.45rem 0.5rem;
+    }
+
+    /* Team names are the one genuinely wide column. max-width on the cell
+       loses to auto table layout, so cap an inline-block inside it instead;
+       the full name stays available via the cell's title attribute. */
+    #season-results-table td:nth-child(3) span {
+        display: inline-block;
+        max-width: 11rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .datatable-container {
+        overflow-x: auto;
+    }
+
+    /* Where the table is still too wide to fit, keep Year and Manager pinned
+       so a row never loses its identity while scrolling sideways. Widths are
+       pinned via min/max so the second column's offset stays exact. */
+    #season-results-table th:nth-child(1),
+    #season-results-table td:nth-child(1),
+    #season-results-table th:nth-child(2),
+    #season-results-table td:nth-child(2) {
+        position: sticky;
+        z-index: 2;
+    }
+
+    #season-results-table th:nth-child(1),
+    #season-results-table td:nth-child(1) {
+        left: 0;
+        min-width: 4.25rem;
+        max-width: 4.25rem;
+    }
+
+    #season-results-table th:nth-child(2),
+    #season-results-table td:nth-child(2) {
+        left: 4.25rem;
+        min-width: 6.25rem;
+        max-width: 6.25rem;
+    }
+
+    /* Stack the search / per-page controls instead of squeezing them. */
+    .datatable-top,
+    .datatable-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .datatable-top { padding: 0 0 0.75rem; }
+    .datatable-bottom { padding: 0.75rem 0 0; }
+
+    /* On phones, drop the three least-consulted columns rather than forcing
+       a long sideways scroll, and pin only Manager — two frozen columns
+       would eat half the viewport. */
+    @media (max-width: 767.98px) {
+        #season-results-table th:nth-child(n+9),
+        #season-results-table td:nth-child(n+9) {
+            display: none;
+        }
+
+        #season-results-table td:nth-child(3) span {
+            max-width: 7rem;
+        }
+
+        #season-results-table th:nth-child(1),
+        #season-results-table td:nth-child(1) {
+            position: static;
+        }
+
+        #season-results-table th:nth-child(2),
+        #season-results-table td:nth-child(2) {
+            left: 0;
+        }
     }
 </style>
 {% endblock %}
@@ -97,7 +184,13 @@
     </div>
 
     <h2 class="h4 mt-5 mb-1">Season-by-Season Results</h2>
-    <p class="text-muted small">Every manager, every year &mdash; team names and all</p>
+    <p class="text-muted small">
+        Every manager, every year &mdash; team names and all.
+        <span class="d-none d-md-inline">
+            PF/PA = season points for &amp; against &middot; Diff = point differential &middot;
+            Waiver = waiver budget left &middot; Moves = roster moves.
+        </span>
+    </p>
     <div class="mb-3" style="max-width: 200px;">
         <label for="year-filter" class="form-label">Year</label>
         <select id="year-filter" class="form-select">
@@ -116,11 +209,11 @@
                     <th>Team</th>
                     <th class="text-center">Finish</th>
                     <th class="text-center">Record</th>
-                    <th class="text-center">Points For</th>
-                    <th class="text-center">Points Against</th>
-                    <th class="text-center">Point Diff</th>
+                    <th class="text-center">PF</th>
+                    <th class="text-center">PA</th>
+                    <th class="text-center">Diff</th>
                     <th class="text-center">Streak</th>
-                    <th class="text-center">Waiver Budget Left</th>
+                    <th class="text-center">Waiver</th>
                     <th class="text-center">Moves</th>
                 </tr>
             </thead>
@@ -129,12 +222,17 @@
                 <tr>
                     <td>{{ row.year }}</td>
                     <td>{{ row.manager }}</td>
-                    <td>{{ row.team }}</td>
-                    <td class="text-center">{{ row.finish }}</td>
-                    <td class="text-center" data-order="{{ row.wins }}">{{ row.wins }}-{{ row.losses }}</td>
+                    <td title="{{ row.team }}"><span>{{ row.team }}</span></td>
+                    <td class="text-center" data-order="{{ row.finish }}">
+                        {%- if row.finish == 1 %}🥇 {% elif row.finish == 2 %}🥈 {% elif row.finish == 3 %}🥉 {% endif -%}
+                        {{ row.finish }}
+                    </td>
+                    <td class="text-center" data-order="{{ '%.4f'|format(row.wins / (row.wins + row.losses)) }}">{{ row.wins }}-{{ row.losses }}</td>
                     <td class="text-center">{{ row.points_for }}</td>
                     <td class="text-center">{{ row.points_against }}</td>
-                    <td class="text-center">{{ row.point_diff }}</td>
+                    <td class="text-center" data-order="{{ row.point_diff }}">
+                        <span class="{{ 'text-success' if row.point_diff > 0 else 'text-danger' if row.point_diff < 0 }}">{{ row.point_diff }}</span>
+                    </td>
                     <td class="text-center">{{ row.streak }}</td>
                     <td class="text-center" data-order="{{ row.waiver_budget if row.waiver_budget is not none else -1 }}">{{ row.waiver_budget if row.waiver_budget is not none else '—' }}</td>
                     <td class="text-center">{{ row.moves }}</td>
