@@ -18,6 +18,8 @@ from declarations import (
     SEASON_2026_EVENTS,
     LEAGUE_FINISHES,
     HISTORICAL_COMPARISON,
+    SEASON_RESULTS,
+    SEASON_RESULTS_YEARS,
 )
 from scheduling import (
     candidate_days,
@@ -90,6 +92,8 @@ def stats():
         'stats.html',
         finishes=LEAGUE_FINISHES,
         historical=HISTORICAL_COMPARISON,
+        season_results=SEASON_RESULTS,
+        season_years=SEASON_RESULTS_YEARS,
     )
 
 
