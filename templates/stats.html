@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Stats{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-1">Ravine Rumble</h1>
+    <p class="text-muted mb-4">2012&ndash;2025</p>
+
+    <p>
+        The Ravine Rumble, established in 2009, remains a vital connection point to our past lives at
+        Allegheny College. You'd think that compiling a bunch of data to show that 17 years' worth of effort
+        has produced the same level of success as Wonjoon's strategy of drafting only New York Jets, Giants,
+        and players of Asian descent would make me upset, but it only makes me laugh. Trust the process.
+        My time will come.
+    </p>
+
+    <h2 class="h4 mt-5 mb-1">League Finishes by Member</h2>
+    <p class="text-muted small">Ordered by # of 1st place finishes</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Manager</th>
+                    <th class="text-center">1</th>
+                    <th class="text-center">2</th>
+                    <th class="text-center">3</th>
+                    <th class="text-center">Total Top 3 Finishes</th>
+                    <th class="text-center">Championships</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in finishes %}
+                <tr>
+                    <td>{{ row.manager }}</td>
+                    <td class="text-center">{{ row.first }}</td>
+                    <td class="text-center">{{ row.second }}</td>
+                    <td class="text-center">{{ row.third }}</td>
+                    <td class="text-center">{{ row.top_3 }}</td>
+                    <td class="text-center">{{ row.championships }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted small">*Includes Championship between 2009-2011</p>
+
+    <h2 class="h4 mt-5 mb-1">Historical Comparison</h2>
+    <p class="text-muted small">Ordered by average league finish</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="align-bottom">Manager</th>
+                    <th rowspan="2" class="align-bottom text-center"># Seasons</th>
+                    <th colspan="3" class="text-center">Season Average</th>
+                    <th colspan="2" class="text-center">Weekly Average</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Finish</th>
+                    <th class="text-center">Wins</th>
+                    <th class="text-center">Waiver Adds</th>
+                    <th class="text-center">Points For</th>
+                    <th class="text-center">Points Against</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in historical %}
+                <tr>
+                    <td>{{ row.manager }}</td>
+                    <td class="text-center">{{ row.seasons }}</td>
+                    <td class="text-center">{{ row.finish }}</td>
+                    <td class="text-center">{{ row.wins }}</td>
+                    <td class="text-center">{{ row.waiver_adds }}</td>
+                    <td class="text-center">{{ row.points_for }}</td>
+                    <td class="text-center">{{ row.points_against }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="h4 mt-5 mb-1">Points For v Against &amp; Result</h2>
+    <p>
+        Since transitioning to PPR scoring in 2021, the correlation coefficient between points scored and
+        winning is 10x compared to points against. Long story short &mdash; matters more how your team does
+        than who you face along the way.
+    </p>
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <img src="{{ url_for('static', filename='stats_points_scored.png') }}" alt="Scatter chart of points scored vs. league finish" class="img-fluid border">
+        </div>
+        <div class="col-12 col-md-6">
+            <img src="{{ url_for('static', filename='stats_points_against.png') }}" alt="Scatter chart of points against vs. league finish" class="img-fluid border">
+        </div>
+    </div>
+</div>
+{% endblock %}

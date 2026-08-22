@@ -63,6 +63,39 @@ SEASON_2026_EVENTS = [
     },
 ]
 
+# League Finishes by Member, 2012-2025. Ordered by # of 1st place finishes.
+# "*" on a finish count means it includes a Championship from 2009-2011.
+LEAGUE_FINISHES = [
+    {"manager": "Nan", "first": "4*", "second": "1", "third": "3", "top_3": 8, "championships": ""},
+    {"manager": "Pat", "first": "3", "second": "", "third": "", "top_3": 3, "championships": ""},
+    {"manager": "Keiron", "first": "2", "second": "3", "third": "1", "top_3": 6, "championships": ""},
+    {"manager": "Brian", "first": "2*", "second": "1", "third": "", "top_3": 3, "championships": ""},
+    {"manager": "Paul", "first": "1", "second": "2", "third": "1", "top_3": 4, "championships": ""},
+    {"manager": "Dan", "first": "1", "second": "2", "third": "3", "top_3": 6, "championships": ""},
+    {"manager": "Tim", "first": "1", "second": "1", "third": "1", "top_3": 3, "championships": "1"},
+    {"manager": "Zach", "first": "1", "second": "1", "third": "1", "top_3": 3, "championships": ""},
+    {"manager": "Brett", "first": "1", "second": "", "third": "1", "top_3": 2, "championships": "1"},
+    {"manager": "Tyler", "first": "1*", "second": "", "third": "3", "top_3": 4, "championships": "2"},
+    {"manager": "John", "first": "", "second": "3", "third": "", "top_3": 3, "championships": ""},
+    {"manager": "Wonjoon", "first": "", "second": "", "third": "", "top_3": 0, "championships": ""},
+]
+
+# Historical Comparison, 2012-2025. Ordered by average league finish.
+HISTORICAL_COMPARISON = [
+    {"manager": "Nan", "seasons": 14, "finish": 3.7, "wins": 8.4, "waiver_adds": 28, "points_for": 110, "points_against": 99},
+    {"manager": "Dan", "seasons": 14, "finish": 4.7, "wins": 7.8, "waiver_adds": 20, "points_for": 105, "points_against": 99},
+    {"manager": "John", "seasons": 14, "finish": 5.2, "wins": 7.4, "waiver_adds": 29, "points_for": 104, "points_against": 99},
+    {"manager": "Keiron", "seasons": 14, "finish": 5.6, "wins": 6.5, "waiver_adds": 26, "points_for": 103, "points_against": 102},
+    {"manager": "Zach", "seasons": 14, "finish": 6.1, "wins": 7.1, "waiver_adds": 23, "points_for": 103, "points_against": 103},
+    {"manager": "Pat", "seasons": 11, "finish": 6.1, "wins": 7.3, "waiver_adds": 26, "points_for": 108, "points_against": 105},
+    {"manager": "Tim", "seasons": 14, "finish": 6.4, "wins": 6.1, "waiver_adds": 17, "points_for": 100, "points_against": 102},
+    {"manager": "Brian", "seasons": 14, "finish": 6.8, "wins": 6.4, "waiver_adds": 23, "points_for": 101, "points_against": 104},
+    {"manager": "Brett", "seasons": 14, "finish": 6.9, "wins": 6.1, "waiver_adds": 14, "points_for": 99, "points_against": 103},
+    {"manager": "Paul", "seasons": 11, "finish": 7.1, "wins": 6.5, "waiver_adds": 11, "points_for": 102, "points_against": 104},
+    {"manager": "Tyler", "seasons": 14, "finish": 7.6, "wins": 6.1, "waiver_adds": 21, "points_for": 97, "points_against": 101},
+    {"manager": "Wonjoon", "seasons": 14, "finish": 9.8, "wins": 4.4, "waiver_adds": 14, "points_for": 93, "points_against": 104},
+]
+
 DAY_BLOCKS = ["Morning", "Afternoon", "Evening"]
 
 # On weekdays only Evening is offered; Morning/Afternoon show as "Not Applicable".

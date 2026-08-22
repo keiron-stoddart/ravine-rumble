@@ -16,6 +16,8 @@ from declarations import (
     EVENT_DURATION_MINUTES,
     AVAILABILITY_ARCHIVED,
     SEASON_2026_EVENTS,
+    LEAGUE_FINISHES,
+    HISTORICAL_COMPARISON,
 )
 from scheduling import (
     candidate_days,
@@ -80,6 +82,15 @@ def season_2026():
 @app.route('/archives/2025')
 def archive_2025():
     return render_template('archive_2025.html')
+
+
+@app.route('/stats')
+def stats():
+    return render_template(
+        'stats.html',
+        finishes=LEAGUE_FINISHES,
+        historical=HISTORICAL_COMPARISON,
+    )
 
 
 @app.route('/availability', methods=['GET'])
