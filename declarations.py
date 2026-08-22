@@ -270,3 +270,69 @@ SEASON_RESULTS = [
 ]
 
 SEASON_RESULTS_YEARS = sorted({row['year'] for row in SEASON_RESULTS}, reverse=True)
+
+# Live trivia deck. Every answer below was derived from SEASON_RESULTS /
+# HISTORICAL_COMPARISON rather than memory — "note" is the supporting stat,
+# shown only once the host reveals the answer.
+TRIVIA_QUESTIONS = [
+    {
+        "question": "In 2021 a team went 13-1 — the best record in league history — and scored more points than any team ever has. Where did it finish?",
+        "options": ["1st", "2nd", "3rd", "4th"],
+        "answer": 2,
+        "note": "Nan's Fire Gutekunst went 13-1 with 1,945.1 points and a +519.8 differential, all league records, and still finished 3rd.",
+    },
+    {
+        "question": "Which manager has never once finished in the top three?",
+        "options": ["Tyler", "Wonjoon", "Brett", "Paul"],
+        "answer": 1,
+        "note": "Wonjoon is the only manager with zero top-three finishes in 14 seasons, and has finished last four times.",
+    },
+    {
+        "question": "Tyler has named his team after the same league member in at least five different seasons. Who?",
+        "options": ["Keiron", "Nan", "Wonjoon", "Brett"],
+        "answer": 0,
+        "note": "Keirons a Bitch42069 (2017-19), KeironComeHome (2020), then #KeironIsOverParty (2021-24).",
+    },
+    {
+        "question": "Who holds the record for the FEWEST points in a single season — just 820.6?",
+        "options": ["Wonjoon", "Tyler", "Paul", "Brett"],
+        "answer": 2,
+        "note": "Paul's 2016 Brady's Ugly scored 820.6 and went 2-11. The next-worst season is over 100 points higher.",
+    },
+    {
+        "question": "What is the most roster moves anyone has made in a single season?",
+        "options": ["38", "45", "57", "64"],
+        "answer": 2,
+        "note": "John made 57 moves in 2025 — and still only finished 6th. He also leads all-time with 403.",
+    },
+    {
+        "question": "Who won the league in 2015 with a losing 7-6 record?",
+        "options": ["Zach", "Dan", "Brian", "Tim"],
+        "answer": 0,
+        "note": "Zach's White Wolverines took the 2015 title at 7-6. Keiron did it too in 2014, at 6-7.",
+    },
+    {
+        "question": "Wonjoon set a league record in 2025. What was his final record?",
+        "options": ["2-12", "1-13", "0-14", "0-13"],
+        "answer": 2,
+        "note": "0-14 — the only winless season in league history, with a -585.8 point differential.",
+    },
+    {
+        "question": "Which team name has won the league three separate times?",
+        "options": ["Big Green Machine", "Ebron James", "Brady's Bunch", "PlaxidantalDischarge"],
+        "answer": 1,
+        "note": "Pat's Ebron James won in 2016, 2018 and 2023 — the only name to take three titles.",
+    },
+    {
+        "question": "Who has the best average league finish across all 14 seasons?",
+        "options": ["Dan", "John", "Pat", "Nan"],
+        "answer": 3,
+        "note": "Nan averages a 3.7 finish and 8.4 wins per season, comfortably ahead of Dan at 4.7.",
+    },
+    {
+        "question": "Who won the 2025 season?",
+        "options": ["Brett", "Paul", "Dan", "Nan"],
+        "answer": 0,
+        "note": "Brett's wonsuperbowl went 9-5 and took the 2025 title.",
+    },
+]

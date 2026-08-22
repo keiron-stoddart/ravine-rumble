@@ -20,6 +20,7 @@ from declarations import (
     HISTORICAL_COMPARISON,
     SEASON_RESULTS,
     SEASON_RESULTS_YEARS,
+    TRIVIA_QUESTIONS,
 )
 from scheduling import (
     candidate_days,
@@ -27,6 +28,7 @@ from scheduling import (
     get_person_availability,
     compute_results,
 )
+import trivia
 
 
 app = Flask(__name__)
@@ -95,6 +97,69 @@ def stats():
         season_results=SEASON_RESULTS,
         season_years=SEASON_RESULTS_YEARS,
     )
+
+
+@app.route('/trivia')
+def trivia_play():
+    return render_template('trivia.html', team=Team)
+
+
+@app.route('/trivia/state')
+def trivia_state():
+    name = request.args.get('name', '').upper()
+    name = name if name in Team.__members__ else None
+    return jsonify(trivia.public_state(trivia.load_state(), name))
+
+
+@app.route('/trivia/answer', methods=['POST'])
+def trivia_answer():
+    payload = request.get_json(silent=True) or {}
+    name = payload.get('name', '').upper()
+    if name not in Team.__members__:
+        return jsonify(ok=False, error='Unknown name'), 400
+
+    try:
+        index = int(payload.get('index'))
+        choice = int(payload.get('choice'))
+    except (TypeError, ValueError):
+        return jsonify(ok=False, error='Invalid answer'), 400
+
+    ok, error = trivia.record_answer(name, index, choice)
+    return (jsonify(ok=True) if ok else (jsonify(ok=False, error=error), 409))
+
+
+@app.route('/trivia/host')
+def trivia_host():
+    return render_template(
+        'trivia_host.html',
+        questions=TRIVIA_QUESTIONS,
+        total=len(TRIVIA_QUESTIONS),
+    )
+
+
+@app.route('/trivia/host/state')
+def trivia_host_state():
+    """The host screen is the one place the answer is shown before the reveal."""
+    state = trivia.load_state()
+    payload = trivia.public_state(state, None)
+    if state['phase'] in (trivia.QUESTION, trivia.REVEALED):
+        payload['correct'] = TRIVIA_QUESTIONS[state['index']]['answer']
+        payload['note'] = TRIVIA_QUESTIONS[state['index']]['note']
+        payload['answered_by'] = sorted(
+            name for name, given in state['answers'].items()
+            if str(state['index']) in given
+        )
+    payload['scores'] = trivia.scores(state)
+    return jsonify(payload)
+
+
+@app.route('/trivia/host/action', methods=['POST'])
+def trivia_host_action():
+    action = (request.get_json(silent=True) or {}).get('action')
+    if action not in ('start', 'reveal', 'next', 'reset'):
+        return jsonify(ok=False, error='Unknown action'), 400
+    trivia.advance(action)
+    return jsonify(ok=True)
 
 
 @app.route('/availability', methods=['GET'])

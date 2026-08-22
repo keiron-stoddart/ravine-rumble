@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Trivia{% endblock %}
+
+{% block extra_head %}
+<style>
+    .option-btn {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 1rem 1.1rem;
+        margin-bottom: 0.75rem;
+        font-size: 1.05rem;
+        border-radius: 0.5rem;
+    }
+
+    .option-btn .option-letter {
+        display: inline-block;
+        width: 1.75rem;
+        font-weight: 700;
+        opacity: 0.7;
+    }
+
+    #question-text {
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    .waiting-dot {
+        animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.35; }
+        50% { opacity: 1; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5" style="max-width: 640px;">
+    <h1 class="h3 mb-3">Ravine Rumble Trivia</h1>
+
+    <div class="mb-4">
+        <label for="name-select" class="form-label">Your name</label>
+        <select id="name-select" class="form-select form-select-lg">
+            <option value="">Choose your name...</option>
+            {% for member in team %}
+            <option value="{{ member.name }}">{{ member.name.title() }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="needs-name" class="alert alert-secondary">
+        Pick your name above to join. The host controls when each question opens.
+    </div>
+
+    <div id="stage" class="d-none">
+        <div class="d-flex justify-content-between align-items-baseline mb-2">
+            <span class="text-muted small" id="progress"></span>
+            <span class="text-muted small" id="answered-count"></span>
+        </div>
+
+        <p id="question-text" class="fw-semibold mb-3"></p>
+
+        <div id="options"></div>
+
+        <div id="feedback" class="alert d-none mt-3" role="alert"></div>
+
+        <div id="scoreboard" class="mt-4 d-none">
+            <h2 class="h5 mb-2">Leaderboard</h2>
+            <ol class="list-group list-group-numbered" id="scoreboard-list"></ol>
+        </div>
+    </div>
+
+    <div id="waiting" class="text-center text-muted py-5 d-none">
+        <div class="waiting-dot fs-4">Waiting for the host&hellip;</div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/trivia.js') }}" defer></script>
+{% endblock %}
