@@ -54,6 +54,7 @@ SEASON_2026_EVENTS = [
         "date": "Thursday, August 27",
         "time": "7:00 – 8:00pm ET",
         "calendar_url": "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NWg0ZTQ2M3E0M2txcDVuaXQybmtyMm5rYm4ga2Vpcm9uLnN0b2RkYXJ0QG0&tmsrc=keiron.stoddart%40gmail.com",
+        "agenda_url": "https://docs.google.com/document/d/1EN87KvOi5RL40nvm7l8JsJQGxtmrMhIX63rtS3Z4QCU/edit",
     },
     {
         "label": "Draft",

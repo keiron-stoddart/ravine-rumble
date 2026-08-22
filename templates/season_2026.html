@@ -17,6 +17,9 @@
                     <a target="_blank" href="{{ event.calendar_url }}">
                         <img border="0" src="https://calendar.google.com/calendar/images/ext/gc_button1_en.gif" alt="Add {{ event.label }} to Google Calendar">
                     </a>
+                    {% if event.agenda_url %}
+                    <a class="mt-3" target="_blank" rel="noopener" href="{{ event.agenda_url }}">📄 View the agenda</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
