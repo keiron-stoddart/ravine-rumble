@@ -276,7 +276,7 @@ SEASON_RESULTS_YEARS = sorted({row['year'] for row in SEASON_RESULTS}, reverse=T
 
 # The stats page gives away every trivia answer, so it stays gated until the
 # pre-season trivia is done. Flip to False to publish it.
-STATS_HIDDEN = True
+STATS_HIDDEN = False
 
 # Live trivia deck. Every answer below was derived from SEASON_RESULTS /
 # HISTORICAL_COMPARISON rather than memory — "note" is the supporting stat,
