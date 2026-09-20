@@ -38,6 +38,7 @@ from scheduling import (
 from prediction import predict_winner
 import trivia
 import pickem
+import groupme
 
 
 app = Flask(__name__)
@@ -400,6 +401,15 @@ def pickem_host_action():
         pickem.advance(action, week)
 
     return jsonify(ok=True)
+
+
+@app.route('/groupme/callback', methods=['POST'])
+def groupme_callback():
+    """GroupMe POSTs every group message here; answer !commands, ignore the rest."""
+    text = groupme.reply_to(request.get_json(silent=True) or {})
+    if text:
+        groupme.post(text)
+    return '', 200
 
 
 @app.route('/availability', methods=['GET'])
