@@ -16,6 +16,7 @@ from declarations import (
     EVENT_DURATION_MINUTES,
     AVAILABILITY_ARCHIVED,
     SEASON_2026_EVENTS,
+    SEASON_2026_POWER_RANKINGS_URL,
     LEAGUE_FINISHES,
     HISTORICAL_COMPARISON,
     SEASON_RESULTS,
@@ -204,7 +205,7 @@ def bracket():
 
 @app.route('/2026')
 def season_2026():
-    return render_template('season_2026.html', events=SEASON_2026_EVENTS)
+    return render_template('season_2026.html', events=SEASON_2026_EVENTS, power_rankings_url=SEASON_2026_POWER_RANKINGS_URL)
 
 
 @app.route('/archives/2025')

@@ -26,6 +26,16 @@
         {% endfor %}
     </div>
 
+    {% if power_rankings_url %}
+    <div class="card text-center mt-4">
+        <div class="card-body">
+            <h3 class="card-title mb-2">Power Rankings</h3>
+            <p class="card-text mb-3">John Hecht's take on where every team stands.</p>
+            <a target="_blank" rel="noopener" href="{{ power_rankings_url }}">📊 Read the power rankings</a>
+        </div>
+    </div>
+    {% endif %}
+
     <p class="text-muted mt-4">
         These dates came out of the pre-season availability poll &mdash;
         <a href="{{ url_for('availability_results') }}">see the archived results</a>.

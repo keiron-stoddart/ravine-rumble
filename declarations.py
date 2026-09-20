@@ -64,6 +64,8 @@ SEASON_2026_EVENTS = [
     },
 ]
 
+SEASON_2026_POWER_RANKINGS_URL = "https://docs.google.com/document/d/1yOUXPM_vSFuaWt5MBdYwDTJy_-2tfTBirbe3DqI4mBs/edit?tab=t.0"
+
 # League Finishes by Member, 2012-2025. Ordered by # of 1st place finishes.
 # "*" on a finish count means it includes a Championship from 2009-2011.
 LEAGUE_FINISHES = [
