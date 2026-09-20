@@ -31,7 +31,12 @@
         <div class="card-body">
             <h3 class="card-title mb-2">Power Rankings</h3>
             <p class="card-text mb-3">John Hecht's take on where every team stands.</p>
-            <a target="_blank" rel="noopener" href="{{ power_rankings_url }}">📊 Read the power rankings</a>
+            <div class="mb-2">
+                <a class="btn btn-danger" href="{{ url_for('power_rankings') }}">📈 Explore the rankings</a>
+            </div>
+            <div>
+                <a target="_blank" rel="noopener" href="{{ power_rankings_url }}">Read the original doc</a>
+            </div>
         </div>
     </div>
     {% endif %}

@@ -6,6 +6,7 @@ from yfpy.query import YahooFantasySportsQuery
 
 
 from configurations import CLIENT_ID, CLIENT_SECRET, PATH
+from power_rankings import POWER_RANKINGS
 from declarations import (
     Team,
     RAVINE_RUMBLE,
@@ -206,6 +207,11 @@ def bracket():
 @app.route('/2026')
 def season_2026():
     return render_template('season_2026.html', events=SEASON_2026_EVENTS, power_rankings_url=SEASON_2026_POWER_RANKINGS_URL)
+
+
+@app.route('/2026/power-rankings')
+def power_rankings():
+    return render_template('power_rankings.html', rankings=POWER_RANKINGS)
 
 
 @app.route('/archives/2025')
