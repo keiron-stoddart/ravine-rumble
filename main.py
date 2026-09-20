@@ -18,6 +18,10 @@ from declarations import (
     AVAILABILITY_ARCHIVED,
     SEASON_2026_EVENTS,
     SEASON_2026_POWER_RANKINGS_URL,
+    DRAFT_2026_TEAMS,
+    DRAFT_2026_GRADES,
+    DRAFT_2026_PROJECTED_STANDINGS,
+    DRAFT_2026_POWER_RANKINGS,
     LEAGUE_FINISHES,
     HISTORICAL_COMPARISON,
     SEASON_RESULTS,
@@ -212,6 +216,17 @@ def season_2026():
 @app.route('/2026/power-rankings')
 def power_rankings():
     return render_template('power_rankings.html', rankings=POWER_RANKINGS)
+
+
+@app.route('/2026/draft-results')
+def draft_results():
+    return render_template(
+        'draft_results.html',
+        managers=DRAFT_2026_TEAMS,
+        grades=DRAFT_2026_GRADES,
+        projected=DRAFT_2026_PROJECTED_STANDINGS,
+        power=DRAFT_2026_POWER_RANKINGS,
+    )
 
 
 @app.route('/archives/2025')

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Draft Results{% endblock %}
+
+{% block extra_head %}
+<style>
+    .dr-list { list-style: none; margin: 0; padding: 0; }
+    .dr-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.5rem;
+        border-bottom: 1px solid var(--bs-border-color);
+        border-left: 3px solid transparent;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+    .dr-row:last-child { border-bottom: 0; }
+    .dr-row:focus-visible { outline: 2px solid #dc3545; outline-offset: -2px; }
+    .dr-row.is-linked { background-color: rgba(220, 53, 69, 0.1); }
+    .dr-row.is-pinned { border-left-color: #dc3545; background-color: rgba(220, 53, 69, 0.16); }
+    .dr-rank { width: 1.5rem; flex-shrink: 0; color: var(--bs-secondary-color); font-variant-numeric: tabular-nums; }
+    .dr-team { flex-grow: 1; min-width: 0; line-height: 1.25; }
+    .dr-team-name { font-weight: 600; overflow-wrap: anywhere; }
+    .dr-manager { font-size: 0.8rem; color: var(--bs-secondary-color); }
+    .dr-value { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .dr-grade {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 50%;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+    .dr-grade sup { font-size: 0.65em; margin-left: 1px; }
+    .dr-grade-A { background-color: #146c43; }
+    .dr-grade-B { background-color: #0a58ca; }
+    .dr-grade-C { background-color: #8a6100; }
+    .dr-grade-D { background-color: #b5490b; }
+    .dr-grade-F { background-color: #b02a37; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-2">Draft Results</h1>
+    <p class="text-muted">
+        Yahoo's verdicts on the 2026 draft. Tap a team to follow it across all three lists.
+    </p>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Draft Grades</h2>
+                    <ul class="dr-list">
+                        {% for team, grade in grades %}
+                        <li class="dr-row" tabindex="0" data-team="{{ team }}">
+                            <div class="dr-team">
+                                <div class="dr-team-name">{{ team }}</div>
+                                <div class="dr-manager">{{ managers[team] }}</div>
+                            </div>
+                            <span class="dr-grade dr-grade-{{ grade[0] }}" aria-label="Grade {{ grade }}">{{ grade[0] }}{% if grade|length > 1 %}<sup>{{ grade[1:]|replace('-', '−') }}</sup>{% endif %}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Draft Day Projected Standings</h2>
+                    <ol class="dr-list">
+                        {% for team, record in projected %}
+                        <li class="dr-row" tabindex="0" data-team="{{ team }}">
+                            <span class="dr-rank">{{ loop.index }}</span>
+                            <div class="dr-team">
+                                <div class="dr-team-name">{{ team }}</div>
+                                <div class="dr-manager">{{ managers[team] }}</div>
+                            </div>
+                            <span class="dr-value">{{ record }}</span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Draft Day Power Rankings</h2>
+                    <ol class="dr-list">
+                        {% for team, score in power %}
+                        <li class="dr-row" tabindex="0" data-team="{{ team }}">
+                            <span class="dr-rank">{{ loop.index }}</span>
+                            <div class="dr-team">
+                                <div class="dr-team-name">{{ team }}</div>
+                                <div class="dr-manager">{{ managers[team] }}</div>
+                            </div>
+                            <span class="dr-value">{{ score }}</span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                    <p class="small text-muted mt-3 mb-0">Based on projected points for the remainder of the season.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-muted mt-4">
+        <a href="{{ url_for('season_2026') }}">Back to the 2026 season</a>
+    </p>
+</div>
+
+<script src="{{ url_for('static', filename='js/draft_results.js') }}" defer></script>
+{% endblock %}

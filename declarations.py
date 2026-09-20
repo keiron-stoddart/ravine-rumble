@@ -61,10 +61,74 @@ SEASON_2026_EVENTS = [
         "date": "Thursday, September 3",
         "time": "7:00 – 9:00pm ET",
         "calendar_url": "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MTlyYXNsZTcwbmJtNmY0dWwwZDNtcjN0ZWMga2Vpcm9uLnN0b2RkYXJ0QG0&tmsrc=keiron.stoddart%40gmail.com",
+        "results_endpoint": "draft_results",
     },
 ]
 
 SEASON_2026_POWER_RANKINGS_URL = "https://docs.google.com/document/d/1yOUXPM_vSFuaWt5MBdYwDTJy_-2tfTBirbe3DqI4mBs/edit?tab=t.0"
+
+# Yahoo's draft-day analysis for the 2026 draft (Thursday, September 3), keyed by
+# Yahoo team name. Each list below is already in Yahoo's order.
+DRAFT_2026_TEAMS = {
+    "BirdsArentReal": "Tyler",
+    "Daddy Dart": "Paul",
+    "wonsuperbowl": "Brett",
+    "PlaxidantalDischarge": "Dan",
+    "The Covfefe Crew": "Brian",
+    "Ebron James": "Pat",
+    "Big Green Machine": "John",
+    "Green Bay Parsons": "Nan",
+    "Booty Meat": "Tim",
+    "Allen’s Army": "Zach",
+    "Brady's Bunch": "Keiron",
+    "Mamdanistan": "Wonjoon",
+}
+
+DRAFT_2026_GRADES = [
+    ("BirdsArentReal", "A+"),
+    ("Daddy Dart", "A+"),
+    ("wonsuperbowl", "A-"),
+    ("PlaxidantalDischarge", "B+"),
+    ("The Covfefe Crew", "B+"),
+    ("Ebron James", "B"),
+    ("Big Green Machine", "C-"),
+    ("Green Bay Parsons", "C-"),
+    ("Booty Meat", "D+"),
+    ("Allen’s Army", "D"),
+    ("Brady's Bunch", "D-"),
+    ("Mamdanistan", "F"),
+]
+
+DRAFT_2026_PROJECTED_STANDINGS = [
+    ("BirdsArentReal", "12-2-0"),
+    ("Daddy Dart", "12-2-0"),
+    ("The Covfefe Crew", "11-3-0"),
+    ("wonsuperbowl", "10-4-0"),
+    ("PlaxidantalDischarge", "10-4-0"),
+    ("Ebron James", "8-6-0"),
+    ("Big Green Machine", "6-8-0"),
+    ("Booty Meat", "6-8-0"),
+    ("Green Bay Parsons", "3-11-0"),
+    ("Allen’s Army", "3-11-0"),
+    ("Brady's Bunch", "2-12-0"),
+    ("Mamdanistan", "1-13-0"),
+]
+
+# Yahoo's power rankings are based on projected points for the rest of the season.
+DRAFT_2026_POWER_RANKINGS = [
+    ("Daddy Dart", 1995.75),
+    ("BirdsArentReal", 1987.48),
+    ("wonsuperbowl", 1981.07),
+    ("PlaxidantalDischarge", 1967.87),
+    ("Ebron James", 1965.75),
+    ("The Covfefe Crew", 1961.88),
+    ("Green Bay Parsons", 1931.77),
+    ("Big Green Machine", 1907.4),
+    ("Booty Meat", 1819.56),
+    ("Allen’s Army", 1816.57),
+    ("Brady's Bunch", 1780.7),
+    ("Mamdanistan", 1616.28),
+]
 
 # League Finishes by Member, 2012-2025. Ordered by # of 1st place finishes.
 # "*" on a finish count means it includes a Championship from 2009-2011.
